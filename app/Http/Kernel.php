@@ -2,8 +2,9 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\AdminMiddleware;  //call admin middleware
+use App\Http\Middleware\UserMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use App\Http\Middleware\AdminMiddleware;  //call admin middleware
 
 class Kernel extends HttpKernel
 {
@@ -65,6 +66,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin.api' => AdminMiddleware::class,  // daftarkan middleware admin
-        // 'user.api' => \App\Http\Middleware\UserMiddleware::class,  // daftarkan middleware user
+        'user.api' => UserMiddleware::class,  // daftarkan middleware user
     ];
 }

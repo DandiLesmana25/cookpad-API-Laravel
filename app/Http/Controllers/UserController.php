@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Recipe;   
+use App\Models\Recipe;
 use App\Models\Tool;   //call Tool model
 use App\Models\Ingredient; 
+use Illuminate\Support\Facades\Validator;  //callthe validator library for input validation
 
 class UserController extends Controller
 {

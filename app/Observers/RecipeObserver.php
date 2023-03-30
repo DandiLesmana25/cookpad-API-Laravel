@@ -38,7 +38,7 @@ class RecipeObserver
     /**
      * Handle the Recipe "deleted" event.
      */
-    public function deleted(Recipe $recipe): void
+    public function deleting(Recipe $recipe): void
     {
         //
         Log::create([

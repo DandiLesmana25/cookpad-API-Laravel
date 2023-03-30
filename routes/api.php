@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\AuthController; //call auth controller
 use App\Http\Controllers\AdminController;  //call admin controller
 
@@ -57,7 +59,7 @@ Route::middleware(['admin.api'])->prefix('admin')->group(function() {
     Route::post('create-recipe',[AdminController::class,'create_recipe']);  //add recipe
     Route::put('update-recipe/{id}',[AdminController::class,'update_recipe']);  //update recipe
 
-    Route::put('delete-recipe/{id}',[AdminController::class,'delete_recipe']);  //deleting recipe
+    Route::delete('delete-recipe/{id}',[AdminController::class,'delete_recipe']);  //deleting recipe
     Route::get('publish/{id}',[AdminController::class,'publish_recipe']);      //publishing recipe
     Route::get('unpublish/{id}',[AdminController::class,'unpublish_recipe']);  //unpublishing recipe
 
@@ -71,7 +73,7 @@ Route::middleware(['admin.api'])->prefix('admin')->group(function() {
 
 
 Route::middleware(['user.api'])->prefix('user')->group(function () {
-    Route::post('submit-recipe',[UserController::class,'create-recipe']);
+    Route::post('submit-recipe',[UserController::class,'create_recipe']);
 
 });
 

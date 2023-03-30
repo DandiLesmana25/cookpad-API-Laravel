@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+// use Dotenv\Validator;
+use App\Models\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator; 
 
 class RecipeController extends Controller
 {
@@ -17,7 +20,7 @@ class RecipeController extends Controller
         $data = [];
         foreach($recipes as $recipe)
         {
-            array_push($data, [
+            array_push($data,[
                 'idresep' => $recipe->idresep,
                 'judul' => $recipe->judul,
                 'gambar' => url($recipe->gambar),

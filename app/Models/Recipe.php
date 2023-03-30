@@ -21,7 +21,8 @@ class Recipe extends Model
     //relasi ke tabel user
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_email', 'email');
+        //             Milik
+        return $this->belongsTo(User::class,'user_email','email');
     }
     
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Recipe;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator; 
-use App\Models\User;   //call user model
-use App\Models\Recipe;   
-use App\Models\Tool;   //call Tool model
 use App\Models\Ingredient;   
+use App\Models\Tool;   //call Tool model
+use App\Models\User;   //call user model
+use Illuminate\Support\Facades\Validator; 
 
 use Illuminate\Support\Facades\DB;   //call query builder
 
@@ -391,7 +391,7 @@ class AdminController extends Controller
         return response()->json([
             "data" => [
                 'msg' => "resep berhasil dihapus",
-                'resep' => $id
+                'resep_id' => $id
             ]
         ],200);
 
@@ -414,14 +414,14 @@ class AdminController extends Controller
 
             return response()->json([
                 "data" => [
-                    'msg' => "resep dengan id".$id."berhasil di publish",
+                    'msg' => "resep dengan id ".$id." berhasil di publish",
                 ]
             ],200);
         }
 
         return response()->json([
             "data" => [
-                'msg' => "resep dengan id".$id."tidak ditemukan",
+                'msg' => "resep dengan id ".$id." tidak ditemukan",
             ]
         ],422);
 
@@ -446,7 +446,7 @@ class AdminController extends Controller
 
             return response()->json([
                 "data" => [
-                    'msg' => "resep dengan id".$id."berhasil di unpublish",
+                    'msg' => "resep dengan id ".$id." berhasil di unpublish",
                 ]
             ],200);
         }
@@ -462,14 +462,14 @@ class AdminController extends Controller
     public function dashboard()
     {
         $totalRecipes= Recipe::count();
-        $totalPublishRecipes = Recipe::where('status_resep', 'publish')->count();
+        $totalPublishRecipes = Recipe::where('status_resep','publish')->count();
         $popularRecipe = DB::table('resep')
-        ->select('judul',DB::raw('count(idresep_view) as jumlah'))
-        ->leftJoin('resep_view','resep.id_resep', '=','resep_view.resep_idresep')
-        ->groupBy('judul')
-        ->orderBy(DB::raw('count(idresep_view)'),'desc')
-        ->limit('10')
-        ->get();
+                            ->select('judul',DB::raw('count(idresep_view) as jumlah'))
+                            ->leftJoin('resep_view','resep.id_resep', '=','resep_view.resep_idresep')
+                            ->groupBy('judul')
+                            ->orderBy(DB::raw('count(idresep_view)'),'desc')
+                            ->limit(10)
+                            ->get();
 
 
 

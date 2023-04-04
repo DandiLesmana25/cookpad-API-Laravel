@@ -465,7 +465,7 @@ class AdminController extends Controller
         $totalPublishRecipes = Recipe::where('status_resep','publish')->count();
         $popularRecipe = DB::table('resep')
                             ->select('judul',DB::raw('count(idresep_view) as jumlah'))
-                            ->leftJoin('resep_view','resep.id_resep', '=','resep_view.resep_idresep')
+                            ->leftJoin('resep_view','resep.idresep', '=','resep_view.resep_idresep')
                             ->groupBy('judul')
                             ->orderBy(DB::raw('count(idresep_view)'),'desc')
                             ->limit(10)

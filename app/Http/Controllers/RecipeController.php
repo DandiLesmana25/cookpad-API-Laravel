@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 // use Dotenv\Validator;
+use App\Models\Tool;
+use App\Models\Rating;
 use App\Models\Recipe;
+use App\Models\Ingredient;
+use App\Models\RecipeView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator; 
 
@@ -18,7 +22,7 @@ class RecipeController extends Controller
         $recipes = Recipe::with('user')->where('status_resep','publish')->get();
 
         $data = [];
-        foreach($recipes as $recipe)
+        foreach($recipes as $recipe) 
         {
             array_push($data,[
                 'idresep' => $recipe->idresep,
@@ -52,7 +56,7 @@ class RecipeController extends Controller
         ->where('idresep', $request->idresep)->get();
         
         $tools = Tool::where('resep_idresep', $request->idresep)->get();
-        $ingredients = Ingredients::where('resep_idresep', $request->idresep)->get();
+        $ingredients = Ingredient::where('resep_idresep', $request->idresep)->get();
 
         
         $data = [];
@@ -76,9 +80,9 @@ class RecipeController extends Controller
          ];
 
         //  memasukan data yang melihat resep ini
-        \App\Models\RecipeView::create([
+        RecipeView::create([
             'email' => $request->email,
-            'date' => $now(),
+            'date' => now(),
             'resep_idresep' => $request->idresep,
         ]);
         
@@ -105,8 +109,8 @@ class RecipeController extends Controller
              return messageError($validator->messages()->toArray());
          }
 
-        //  memasukan data R
-        \App\Models\Rating::create([
+        //  memasukan data Rsp
+        Rating::create([
             'rating' => $request->rating,
             'review' => $request->review,
             'resep_idresep' => $request->id_resep,

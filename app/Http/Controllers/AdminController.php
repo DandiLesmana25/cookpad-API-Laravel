@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Ingredient;   
 use App\Models\Tool;   //call Tool model
 use App\Models\User;   //call user model
-use Illuminate\Support\Facades\Validator; 
+// use Illuminate\Contracts\Validation\Validator;
 
+
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;   //call query builder
 
 
@@ -231,7 +233,7 @@ class AdminController extends Controller
          //create input validation
         $validator = Validator::make($request->all(), [
             'judul' => 'required|max:255',                           
-            'gambar' => 'required|mimes:png,jpg,jpeg|max2048',  //gambar harus bertipe  png,jpg,jpeg| dan max 2 mb
+            'gambar' => 'required|mimes:png,jpg,jpeg|max:2048',  //gambar harus bertipe  png,jpg,jpeg| dan max 2 mb
             'cara_pembuatan' => 'required',   
             'video' => 'required',              
             'user_email' => 'required', 
@@ -249,7 +251,9 @@ class AdminController extends Controller
 
         // ubah nama file yang akan dimasukan ke server
         $filename = now()->timestamp."_".$request->gambar->getClientOriginalName();
-        $thumbnail = move('uploads', $filename);  //upload gambar ke folder upluads
+        $thumbnail->move('uploads', $filename);  //upload gambar ke folder upluads
+
+        $recipeData = $validator->validated();
 
         $recipe = Recipe::create([
             'judul' => $recipeData['judul'],
@@ -305,7 +309,7 @@ class AdminController extends Controller
          //create input validation
         $validator = Validator::make($request->all(), [
             'judul' => 'required|max:255',                           
-            'gambar' => 'required|mimes:png,jpg,jpeg|max2048',  //gambar harus bertipe  png,jpg,jpeg| dan max 2 mb
+            'gambar' => 'required|mimes:png,jpg,jpeg|max:2048',  //gambar harus bertipe  png,jpg,jpeg| dan max 2 mb
             'cara_pembuatan' => 'required',   
             'video' => 'required',              
             'user_email' => 'required', 
@@ -323,7 +327,7 @@ class AdminController extends Controller
 
         // ubah nama file yang akan dimasukan ke server
         $filename = now()->timestamp."_".$request->gambar->getClientOriginalName();
-        $thumbnail = move('uploads', $filename);  //upload gambar ke folder upluads
+        $thumbnail->move('uploads', $filename);  //upload gambar ke folder upluads
 
         $recipeData = $validator->validated();
 
@@ -486,4 +490,57 @@ class AdminController extends Controller
      
 
     }
+
+
+
+    public function showRecipes()
+    {
+        // display idresep, judul, status_resep, user_email, updated_at, gambar
+
+        $recipes = Recipe::select('idresep', 'judul', 'status_resep', 'user_email', 'updated_at', 'gambar')->get();
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Recipes Found',
+            'data' => [
+                'recipes' => [
+                    $recipes
+                ],
+            ]
+        ], 200);
+    }
+
+
+    // tugas
+    public function showRecipeById($id)
+    {
+        $recipe = Recipe::where('idresep', $id)->first();
+
+        if (!$recipe) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Not Found'
+            ], 404);
+        }
+
+        $ingredients = Ingredient::where('resep_idresep', $id)->get();
+        $tools = Tool::where('resep_idresep', $id)->get();
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Recipe Found',
+            'data' => [
+                'recipe' => [
+                    $recipe
+                ],
+                'ingredients' => [
+                    $ingredients
+                ],
+                'tools' => [
+                    $tools
+                ]
+            ]
+        ], 200);
+    }
+
 }

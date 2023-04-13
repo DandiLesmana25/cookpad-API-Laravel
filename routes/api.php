@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\AuthController; //call auth controller
 use App\Http\Controllers\AdminController;  //call admin controller
@@ -24,6 +25,8 @@ use App\Http\Controllers\AdminController;  //call admin controller
  *      guest route
  * 
  */
+
+ Route::get('author', [AuthorController::class, 'author']);
 
 // route untuk mengakses API registrasi akun 
 Route::post('register',[AuthController::class,'register']);
@@ -59,6 +62,11 @@ Route::middleware(['admin.api'])->prefix('admin')->group(function() {
     Route::post('create-recipe',[AdminController::class,'create_recipe']);  //add recipe
     Route::put('update-recipe/{id}',[AdminController::class,'update_recipe']);  //update recipe
 
+    // tugas
+
+    Route::get('show-recipes',[AdminController::class,'showRecipes']);
+    Route::get('show-recipes/{id}', [AdminController::class, 'showRecipeById']);
+
     Route::delete('delete-recipe/{id}',[AdminController::class,'delete_recipe']);  //deleting recipe
     Route::get('publish/{id}',[AdminController::class,'publish_recipe']);      //publishing recipe
     Route::get('unpublish/{id}',[AdminController::class,'unpublish_recipe']);  //unpublishing recipe
@@ -68,6 +76,7 @@ Route::middleware(['admin.api'])->prefix('admin')->group(function() {
      dipublish, dan resep yang popular    
     */
     Route::get('dashboard',[AdminController::class,'dashboard']);
+    // Route::get('show-recipes',[ ::class,'show_recipes']);
 
 });
 

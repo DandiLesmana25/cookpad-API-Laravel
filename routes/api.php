@@ -66,10 +66,10 @@ Route::middleware(['admin.api'])->prefix('admin')->group(function() {
 
     Route::get('show-recipes',[AdminController::class,'showRecipes']);  //done
 
+    Route::get('show-recipes/{id}', [AdminController::class,'showRecipeById']);
 
-    // Route::get('show-recipes/{id}', [AdminController::class, 'showRecipeById']);
     // Route::get('show-recipes/get-recipe',[AdminController::class,'showRecipeById']);
-    Route::post('show-recipes/get-recipe',[AdminController::class,'showRecipeById']); 
+    // Route::post('show-recipes/get-recipe',[AdminController::class,'showRecipeById']); 
     
 
     Route::delete('delete-recipe/{id}',[AdminController::class,'delete_recipe']);  //deleting recipe

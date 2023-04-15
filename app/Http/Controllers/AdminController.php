@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\Ingredient;
+use App\Models\RecipeView;
 use Illuminate\Http\Request;
-use App\Models\Ingredient;   
 use App\Models\Tool;   //call Tool model
-use App\Models\User;   //call user model
 // use Illuminate\Contracts\Validation\Validator;
 
 
+use App\Models\User;   //call user model
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;   //call query builder
 
@@ -492,23 +493,6 @@ class AdminController extends Controller
     }
 
 
-//kode salah
-    // public function showRecipes()
-    // {
-    //     // display idresep, judul, status_resep, user_email, updated_at, gambar
-
-    //     $recipes = Recipe::select('idresep', 'judul', 'status_resep', 'user_email', 'updated_at', 'gambar')->get();
-
-    //     return response()->json([
-    //         'status' => 'Success',
-    //         'message' => 'Recipes Found',
-    //         'data' => [
-    //             'recipes' => [
-    //                 $recipes
-    //             ],
-    //         ]
-    //     ], 200);
-    // }
 
     public function showRecipes()
     {
@@ -535,89 +519,38 @@ class AdminController extends Controller
 
 
     // tugas
-    // public function showRecipeById($id)
-    // {
-    //     $recipe = Recipe::where('idresep', $id)->first();
-
-    //     if (!$recipe) {
-    //         return response()->json([
-    //             'status' => 'Error',
-    //             'message' => 'Not Found'
-    //         ], 404);
-    //     }
-
-    //     $ingredients = Ingredient::where('resep_idresep', $id)->get();
-    //     $tools = Tool::where('resep_idresep', $id)->get();
-
-    //     return response()->json([
-    //         'status' => 'Success',
-    //         'message' => 'Recipe Found',
-    //         'data' => [
-    //             'recipe' => [
-    //                 $recipe
-    //             ],
-    //             'ingredients' => [
-    //                 $ingredients
-    //             ],
-    //             'tools' => [
-    //                 $tools
-    //             ]
-    //         ]
-    //     ], 200);
-    // }
-    public function showRecipeById(Request $request)
-    {
-         //create input validation
-        $validator = Validator::make($request->all(), [
-            'idresep' => 'required',  
-            'email' => 'email'  
-
-        ]);
-
-        if($validator->fails()) {
-            return messageError($validator->messages()->toArray());
-        }
-
-        $recipe = Recipe::with('user')->where('idresep', $request->idresep)
-        ->get();
-
-        // $recipes = Resep::with('user')
-        // ->where('idresep', $request->idresep)
-        // ->get();
-
-        // $recipe = Recipe::where('status_resep', 'publish')
-        // ->where('idresep', $request->idresep)->get();
-
-       
-       $tools = Tool::where('resep_idresep', $request->idresep)->get();
-       $ingredients = Ingredient::where('resep_idresep', $request->idresep)->get();
+    public function showRecipeById($id)
+    {      
+       $recipe = Recipe::where('idresep', $id)->get();
+       $tools = Tool::where('resep_idresep', $id)->get();
+       $ingredients = Ingredient::where('resep_idresep', $id)->get();
 
        
        $data = [];
         // perulangan untuk memasukan data lebih dari satu 
-        foreach($recipe as $recipe) {
+        foreach($recipe as $nilai) {
            array_push($data,[
-               'idresep' => $recipe->idresep,
-               'judul' => $recipe->judul,
-               'gambar' => url($recipe->gambar),
-               'cara_pembuatan' => $recipe->cara_pembuatan,
-               'video' => $recipe->video,
-               'nama' => $recipe->user->nama
+               'idresep'=>$nilai->idresep,
+               'judul'=>$nilai->judul,
+               'gambar'=>url($nilai->gambar),
+               'cara_pembuatan'=>$nilai->cara_pembuatan,
+               'video'=>$nilai->video,
+               'nama'=>$nilai->user->nama
            ]);
         }
 
         $recipeData= [
-           'recipe' => $data,
-           'tools' => $tools,
-           'ingredients' => $ingredients
+           'recipe'=>$data,
+           'tools'=>$tools,
+           'ingredients'=>$ingredients
 
         ];
 
        //  memasukan data yang melihat resep ini
        RecipeView::create([
-           'email' => $request->email,
-           'date' => now(),
-           'resep_idresep' => $request->idresep,
+        //    'email' => $request->email,
+           'date'=>now(),
+           'resep_idresep'=>$id,
        ]);
        
        return response()->json($recipeData,200);

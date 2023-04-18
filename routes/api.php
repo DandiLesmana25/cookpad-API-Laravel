@@ -26,6 +26,7 @@ use App\Http\Controllers\AdminController;  //call admin controller
  * 
  */
 
+
  Route::get('author', [AuthorController::class, 'author']);
 
 // route untuk mengakses API registrasi akun 

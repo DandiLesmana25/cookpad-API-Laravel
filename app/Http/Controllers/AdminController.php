@@ -332,7 +332,7 @@ class AdminController extends Controller
 
         $recipeData = $validator->validated();
 
-        Recipe::where('idresep'.$id)->update([
+        Recipe::where('idresep',$id)->update([
             'judul' => $recipeData['judul'],
             'gambar' => 'uploads/'.$filename,    //cukup masukan path dari gambar yang di uploads
             'cara_pembuatan' =>$recipeData['cara_pembuatan'],
@@ -366,14 +366,14 @@ class AdminController extends Controller
             Tool::create([
                 'nama_alat' => $alat->nama,
                 'keterangan' => $alat->keterangan,
-                'resep_idresep' => $recipe->id,
+                'resep_idresep' =>$id
     
             ]);
         }
 
         return response()->json([
             "data" => [
-                'msg' => "resep berhasil di simpan",
+                'msg' => "resep berhasil di update",
                 'resep' => $recipeData['judul']
             ]
         ],200);
@@ -440,7 +440,7 @@ class AdminController extends Controller
         $recipe= Recipe::where('idresep',$id)->get();
 
         if($recipe) {
-            Recipe::where('idresep',$id)->update(['status_resep'=> 'unpublish']);
+            Recipe::where('idresep',$id)->update(['status_resep'=> 'unpublished']);
 
             \App\Models\Log::create([
                 'module' => 'publish resep',

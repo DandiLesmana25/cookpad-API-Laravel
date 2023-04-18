@@ -26,7 +26,7 @@ class UserController extends Controller
          //create input validation
         $validator = Validator::make($request->all(), [
             'judul' => 'required|max:255',                           
-            'gambar' => 'required|mimes:png,jpg,jpeg|max2048',  //gambar harus bertipe  png,jpg,jpeg| dan max 2 mb
+            'gambar' => 'required|mimes:png,jpg,jpeg|max:2048',  //gambar harus bertipe  png,jpg,jpeg| dan max 2 mb
             'cara_pembuatan' => 'required',   
             'video' => 'required',              
             'user_email' => 'required', 
@@ -44,7 +44,9 @@ class UserController extends Controller
 
         // ubah nama file yang akan dimasukan ke server
         $filename = now()->timestamp."_".$request->gambar->getClientOriginalName();
-        $thumbnail = move('uploads', $filename);  //upload gambar ke folder upluads
+        $thumbnail->move('uploads', $filename);  //upload gambar ke folder upluads
+
+        $recipeData = $validator->validated();
 
         $recipe = Recipe::create([
             'judul' => $recipeData['judul'],

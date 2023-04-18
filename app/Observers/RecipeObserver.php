@@ -24,7 +24,7 @@ class RecipeObserver
     /**
      * Handle the Recipe "updated" event.
      */
-    public function updated(Recipe $recipe): void
+    public function updated(Recipe $recipe)
     {
         //
         Log::create([

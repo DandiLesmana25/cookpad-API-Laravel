@@ -109,11 +109,12 @@ class RecipeController extends Controller
              return messageError($validator->messages()->toArray());
          }
 
+         $recipe = Recipe::where('idresep', $request->idresep)->first();
         //  memasukan data Rsp
         Rating::create([
             'rating' => $request->rating,
             'review' => $request->review,
-            'resep_idresep' => $request->id_resep,
+            'resep_idresep' => $request->idresep,
             'email_user' => $request->email,
         ]);
         

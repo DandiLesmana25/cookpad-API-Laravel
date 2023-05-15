@@ -26,6 +26,6 @@ class UserSeeder extends Seeder
             'last_login' => now() //built in library untuk menampilkan tanggal saat ini 
         ]);
        //panggil UserFactory, generate sebanyak 50 data 
-        User::factory()->count(50)->create();
+        // User::factory()->count(50)->create();
     }
 }
